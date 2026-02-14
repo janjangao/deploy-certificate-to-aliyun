@@ -40,6 +40,12 @@ def upload_certificate(client, domain_name, cert_path, key_path):
     response = client.do_action_with_exception(request)
     print(str(response, encoding='utf-8'))
 
+def find_base_domain(cdn_domain, domains):
+    for d in domains:
+        if cdn_domain == d or cdn_domain.endswith("." + d):
+            return d
+    return None
+
 def main():
     access_key_id = get_env_var('ALIYUN_ACCESS_KEY_ID')
     access_key_secret = get_env_var('ALIYUN_ACCESS_KEY_SECRET')
@@ -48,7 +54,11 @@ def main():
 
     client = AcsClient(access_key_id, access_key_secret, 'cn-hangzhou')
 
-    for domain, cdn_domain in zip(domains, cdn_domains):
+    for cdn_domain in cdn_domains:
+        domain = find_base_domain(cdn_domain, domains)
+        if not domain:
+            continue
+            
         cert_path = f'~/certs/{domain}/fullchain.pem'
         key_path = f'~/certs/{domain}/privkey.pem'
         upload_certificate(client, cdn_domain, cert_path, key_path)
