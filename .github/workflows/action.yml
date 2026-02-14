@@ -18,33 +18,33 @@ jobs:
       with:
         python-version: '3.8'
 
-    # - name: Install acme.sh
-    #   env:
-    #     EMAIL: ${{ secrets.EMAIL}}
-    #   run: |
-    #     sudo apt-get update
-    #     sudo apt-get install -y socat
-    #     curl https://get.acme.sh | sh -s email="${EMAIL}"
+    - name: Install acme.sh
+      env:
+        EMAIL: ${{ secrets.EMAIL}}
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y socat
+        curl https://get.acme.sh | sh -s email="${EMAIL}"
 
-    # - name: Prepare acme.sh credentials
-    #   run: |
-    #     mkdir -p ~/.acme.sh
-    #     IFS=',' read -r -a domain_array <<< "${{ secrets.DOMAINS }}"
-    #     for domain in "${domain_array[@]}"; do
-    #       mkdir -p ~/certs/${domain}
-    #     done
+    - name: Prepare acme.sh credentials
+      run: |
+        mkdir -p ~/.acme.sh
+        IFS=',' read -r -a domain_array <<< "${{ secrets.DOMAINS }}"
+        for domain in "${domain_array[@]}"; do
+          mkdir -p ~/certs/${domain}
+        done
 
-    # - name: Obtain SSL Certificates
-    #   env:
-    #     DOMAINS: ${{ secrets.DOMAINS }}
-    #     Ali_Key: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
-    #     Ali_Secret: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
-    #   run: |
-    #     IFS=',' read -r -a domain_array <<< "${DOMAINS}"
-    #     for domain in "${domain_array[@]}"; do
-    #       ~/.acme.sh/acme.sh --issue --dns dns_ali -d "${domain}" -d "*.${domain}" \
-    #       --key-file ~/certs/${domain}/privkey.pem --fullchain-file ~/certs/${domain}/fullchain.pem
-    #     done
+    - name: Obtain SSL Certificates
+      env:
+        DOMAINS: ${{ secrets.DOMAINS }}
+        Ali_Key: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
+        Ali_Secret: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
+      run: |
+        IFS=',' read -r -a domain_array <<< "${DOMAINS}"
+        for domain in "${domain_array[@]}"; do
+          ~/.acme.sh/acme.sh --issue --dns dns_ali -d "${domain}" -d "*.${domain}" \
+          --key-file ~/certs/${domain}/privkey.pem --fullchain-file ~/certs/${domain}/fullchain.pem
+        done
 
 
     - name: Install Python dependencies
