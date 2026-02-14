@@ -61,7 +61,8 @@ def main():
             
         cert_path = f'~/certs/{domain}/fullchain.pem'
         key_path = f'~/certs/{domain}/privkey.pem'
-        upload_certificate(client, cdn_domain, cert_path, key_path)
+        # upload_certificate(client, cdn_domain, cert_path, key_path)
+        print(f"domain: {domain}, cdn_domain: {cdn_domain}")
 
 if __name__ == "__main__":
     main()
