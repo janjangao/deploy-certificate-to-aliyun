@@ -1,9 +1,6 @@
 name: Auto Renew and Deploy SSL Certificates
 
 on:
-  push:
-    branches:
-      - main
   schedule:
     - cron: '0 0 20 */2 *' # 每两个月的第二十天执行一次
   workflow_dispatch:
